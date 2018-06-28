@@ -1,9 +1,29 @@
 apply plugin: 'com.android.library'
 
+ext {
+
+    bintrayRepo = 'maven'
+    bintrayName = 'globostore-autoupdate'
+    publishedGroupId = 'br.com.globo'
+    libraryName = 'globostoreautoupdate'
+    artifact = 'globostoreautoupdate'
+    libraryDescription = 'Globostore autoupdate library'
+    siteUrl = 'https://github.com/thiagomarcal/globostore-autoupdate-android'
+    gitUrl = 'https://github.com/thiagomarcal/globostore-autoupdate-android.git'
+    
+    libraryVersion = '1.0.0'
+    developerId = 'thiagomarcal'
+    developerName = 'Thiago Marcali'
+    developerEmail = 'thiagormarcal@gmail.com'
+    organization = 'thiagomarcal'
+    
+    licenseName = 'The MIT License (MIT)'
+    licenseUrl = 'https://opensource.org/licenses/MIT'
+    allLicenses = ["MIT"]
+}
+
 android {
     compileSdkVersion 27
-
-
 
     defaultConfig {
         minSdkVersion 15
@@ -31,4 +51,25 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+
+buildscript {
+    repositories {
+        jcenter()
+
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
+    }
+
+}
+
+apply from: 'https://raw.githubusercontent.com/quangctkm9207/template-files/master/android/gradle/install.gradle'
+apply from: 'https://raw.githubusercontent.com/quangctkm9207/template-files/master/android/gradle/bintray.gradle'
+
+repositories {
+    google()
 }
