@@ -11,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
@@ -20,6 +21,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 
 import android.widget.TextView;
@@ -63,7 +67,7 @@ public class GlobostoreAutoUpdate {
      * @param callbackContext The callback context
      */
     private synchronized void alert(final String message, final String title, final String buttonLabel, final Context callbackContext, final Version version) {
-        Activity activity = (Activity) callbackContext;
+        final Activity activity = (Activity) callbackContext;
         Runnable runnable = new Runnable() {
             public void run() {
 
@@ -74,9 +78,28 @@ public class GlobostoreAutoUpdate {
                 dlg.setPositiveButton(buttonLabel,
                         new AlertDialog.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+
+                                final ProgressDialog progress = new ProgressDialog(activity);
+                                progress.setMessage("Atualizando...");
+                                progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                                progress.setIndeterminate(false);
+                                progress.setMax(100);
+                                progress.setProgress(0);
+                                progress.show();
+
+                                Handler mHandler = new Handler(Looper.getMainLooper()) {
+                                    @Override
+                                    public void handleMessage(Message message) {
+                                        Log.v(GlobostoreAutoUpdate.TAG, "%" + message.what);
+                                        progress.setProgress(message.what);
+                                        if (message.what == 100) progress.dismiss();
+                                    }
+                                };
+
                                 dialog.dismiss();
                                 UpdateApp update = new UpdateApp();
                                 update.setContext(callbackContext);
+                                update.setHandler(mHandler);
                                 update.execute(mapa.get("downloadUrl").toString() + "/" + version.getDownloadUrl());
                             }
                         });

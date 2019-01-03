@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.util.Log;
 
@@ -16,9 +17,14 @@ import java.net.URL;
 
 public class UpdateApp extends AsyncTask<String, Void, Void> {
     private Context context;
+    private Handler handler;
 
     public void setContext(Context contextf) {
         context = contextf;
+    }
+
+    public void setHandler(Handler handler) {
+        this.handler = handler;
     }
 
     @Override
@@ -54,9 +60,11 @@ public class UpdateApp extends AsyncTask<String, Void, Void> {
 
             while ((len1 = is.read(buffer)) != -1) {
                 total += len1;
-                Log.v(GlobostoreAutoUpdate.TAG, "Writing...."+(total * 100 / fileLength) + "%");
+                long pgr = (total * 100 / fileLength);
                 fos.write(buffer, 0, len1);
+                this.handler.obtainMessage((int) pgr).sendToTarget();
             }
+
             Log.v(GlobostoreAutoUpdate.TAG, "File successfully downloaded and stored.");
             fos.flush();
             fos.close();
