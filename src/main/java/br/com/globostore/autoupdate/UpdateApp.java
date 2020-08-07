@@ -44,7 +44,7 @@ public class UpdateApp extends AsyncTask<String, Void, Void> {
             int fileLength = c.getContentLength();
             long total = 0;
 
-            String PATH = context.getExternalCacheDir().getAbsolutePath();
+            String PATH = getPath(context);
             File file = new File(PATH);
             file.mkdirs();
 
