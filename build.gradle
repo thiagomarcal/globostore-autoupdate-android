@@ -26,7 +26,7 @@ android {
     compileSdkVersion 27
 
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 15
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -46,8 +46,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     implementation 'com.android.support:appcompat-v7:27.1.1'
+//    implementation 'com.android.support:support-v4:27.1.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -55,9 +55,7 @@ dependencies {
 
 buildscript {
     repositories {
-        mavenCentral()
         jcenter()
-
         google()
     }
     dependencies {
@@ -68,10 +66,17 @@ buildscript {
 
 }
 
+tasks.withType(Javadoc) {
+    failOnError false
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
+
 apply from: 'https://raw.githubusercontent.com/quangctkm9207/template-files/master/android/gradle/install.gradle'
 apply from: 'https://raw.githubusercontent.com/quangctkm9207/template-files/master/android/gradle/bintray.gradle'
 
 repositories {
-    mavenCentral()
+    jcenter()
     google()
 }
