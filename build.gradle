@@ -11,7 +11,7 @@ ext {
     siteUrl = 'https://github.com/thiagomarcal/globostore-autoupdate-android'
     gitUrl = 'https://github.com/thiagomarcal/globostore-autoupdate-android.git'
     
-    libraryVersion = '1.0.1'
+    libraryVersion = '1.0.2'
     developerId = 'thiagomarcal'
     developerName = 'Thiago Marcali'
     developerEmail = 'thiagormarcal@gmail.com'
@@ -26,7 +26,7 @@ android {
     compileSdkVersion 27
 
     defaultConfig {
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -55,12 +55,13 @@ dependencies {
 
 buildscript {
     repositories {
+        mavenCentral()
         jcenter()
 
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.6.3'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
     }
@@ -71,5 +72,6 @@ apply from: 'https://raw.githubusercontent.com/quangctkm9207/template-files/mast
 apply from: 'https://raw.githubusercontent.com/quangctkm9207/template-files/master/android/gradle/bintray.gradle'
 
 repositories {
+    mavenCentral()
     google()
 }

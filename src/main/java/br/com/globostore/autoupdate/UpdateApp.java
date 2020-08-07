@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 
 import java.io.File;
@@ -70,12 +71,7 @@ public class UpdateApp extends AsyncTask<String, Void, Void> {
             fos.close();
             is.close();
 
-            Log.v(GlobostoreAutoUpdate.TAG, "Starting activity...");
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setDataAndType(Uri.fromFile(outputFile),
-                    "application/vnd.android.package-archive");
-            context.startActivity(intent);
+            installApp(context, outputFile);
 
             Log.v(GlobostoreAutoUpdate.TAG, "Started activity successfully!");
         } catch (Exception e) {
@@ -94,4 +90,31 @@ public class UpdateApp extends AsyncTask<String, Void, Void> {
             }
         }
     }
+
+    private void installApp(Context context, File outputFile) {
+        Log.v(GlobostoreAutoUpdate.TAG, "Starting installation activity...");
+        if(android.os.Build.VERSION.SDK_INT>25){
+            Log.v(GlobostoreAutoUpdate.TAG, "Device SDK greater then 25...");
+            Uri apkUri = FileProvider.getUriForFile(context, ".FileProvider", outputFile);
+            Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
+            intent.setData(apkUri);
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            context.startActivity(intent);
+        } else {
+            Log.v(GlobostoreAutoUpdate.TAG, "Device SDK lesser then 25...");
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setDataAndType(Uri.fromFile(outputFile), "application/vnd.android.package-archive");
+            context.startActivity(intent);
+        }
+    }
+
+    private String getPath(Context context) {
+        if(android.os.Build.VERSION.SDK_INT>25) {
+            return context.getCacheDir().getAbsolutePath();
+        } else {
+            return context.getExternalCacheDir().getAbsolutePath();
+        }
+    }
+
 }
