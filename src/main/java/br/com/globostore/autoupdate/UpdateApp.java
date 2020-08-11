@@ -98,7 +98,7 @@ public class UpdateApp extends AsyncTask<String, Void, Void> {
             Uri apkUri = FileProvider.getUriForFile(context, ".FileProvider", outputFile);
             Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
             intent.setData(apkUri);
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         } else {
             Log.v(GlobostoreAutoUpdate.TAG, "Device SDK lesser then 25...");
